@@ -23,6 +23,22 @@
             "username": "auraflixxbot",
             "createdByUsername": "xxrb",
             "isEnabled": true
+        },
+        {
+            "id": 1,
+            "token": "8706449189:AAEtmKBXxZZiQFP9FMW05-gyUlLnvef_WAw",
+            "name": "CRworker 1",
+            "username": "CRworker1_bot",
+            "createdByUsername": "xxrb",
+            "isEnabled": true
+        },
+            {
+            "id": 2,
+            "token": "8892835082:AAF77PIcdj-RKknMwDDFnjdcqF4s0vFS0uc",
+            "name": "CRworker 2",
+            "username": "CRworker2_bot",
+            "createdByUsername": "xxrb",
+            "isEnabled": true
         }
     ],
     "download_bots": [
