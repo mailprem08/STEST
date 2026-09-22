@@ -530,5 +530,26 @@
       }
     ],
     "hasAudio": true
+  },
+{
+  "1790120819575": {
+    "id": "1790120819575",
+    "name": "Badshah - DJ Waley Babu - feat Aastha Gill - Party Anthem Of 2015 - DJ Wale Babu.mp4",
+    "created": 1790121023836,
+    "masterFileName": "MP_1790120819575.m3u8",
+    "playlistUrl": "/s/BQACAgUAAyEGAAT_02PQAAIV1WqzFD_DRPZ3TToLzJ9VUBwTyE26AAJjJAACiyqZVQN2cQhWpO-cPQQ",
+    "renditions": [
+      "720p"
+    ],
+    "variants": [
+      {
+        "name": "720p",
+        "height": 720,
+        "width": 1280,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIV1GqzFD5BiWIxk6PLD_lbbIA3CCxaAAJiJAACiyqZVaQnkBG_gcG3PQQ"
+      }
+    ],
+    "hasAudio": true
   }
+}
 }
