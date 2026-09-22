@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PLAYER</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container { max-width: 900px; width: 100%; }
+        
+        .navbar {
+            background: #16213e;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #e94560, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .navbar .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .navbar .nav-links a:hover { background: #1a1a2e; color: white; }
+        
+        .video-wrapper {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(233, 69, 96, 0.3);
+            position: relative;
+        }
+        video { width: 100%; display: block; }
+        
+        #bufferLoader {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10;
+        }
+        #bufferLoader.show { display: flex; }
+        .loader-spinner {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #e94560;
+            border-right: 4px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-text {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 300;
+        }
+        .loader-progress {
+            margin-top: 10px;
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .loader-progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #e94560, #4CAF50);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #1a1a2e;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            background: #e94560;
+        }
+        .badge.success { background: #4CAF50; }
+        .badge.error { background: #f44336; }
+        .badge.buffering {
+            background: #ff9800;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .badge.quality {
+            background: #333;
+            border: 1px solid #555;
+        }
+        .badge-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        #qualitySelectWrap {
+            display: none;
+            margin-top: 10px;
+        }
+        #qualitySelectWrap label {
+            font-size: 12px;
+            color: #888;
+            margin-right: 8px;
+        }
+        #qualitySelect {
+            background: #0f3460;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 13px;
+        }
+        .loading { text-align: center; padding: 50px; color: #888; }
+        .loading.error { color: #f44336; }
+        .back-btn {
+            color: #4CAF50;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .back-btn:hover { background: #4CAF50; color: white; }
+        
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; text-align: center; }
+            .navbar .nav-links { justify-content: center; }
+            .info { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">🎬 VideoStream</div>
+            <div class="nav-links">
+                <a href="/">🏠 হোম</a>
+                <a href="/list.html">📋 লাইব্রেরি</a>
+                <a href="/upload.html">📤 আপলোড</a>
+            </div>
+        </nav>
+
+        <div class="video-wrapper">
+            <div id="loading" class="loading">⏳ লোড হচ্ছে...</div>
+            <video id="videoPlayer" controls style="display:none;"></video>
+            <div id="bufferLoader">
+                <div class="loader-spinner"></div>
+                <div class="loader-text">⏳ বাফারিং...</div>
+                <div class="loader-progress">
+                    <div class="loader-progress-bar" id="bufferProgress"></div>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <div class="info">
+                <div>
+                    <h2 id="videoTitle">ভিডিও প্লেয়ার</h2>
+                    <p style="color: #888; font-size: 14px;">🎥 HLS Streaming</p>
+                </div>
+                <div class="badge-row">
+                    <span class="badge" id="statusBadge">🔄 লোডিং...</span>
+                    <span class="badge quality" id="qualityBadge" style="display:none;"></span>
+                </div>
+            </div>
+            <div id="qualitySelectWrap">
+                <label for="qualitySelect">🎚️ কোয়ালিটি:</label>
+                <select id="qualitySelect" onchange="onQualitySelectChange()"></select>
+            </div>
+            <div id="downloadWrap" style="display:none; margin-top:15px;">
+                <label for="downloadQuality" style="font-size:12px;color:#888;margin-right:8px;">⬇️ ডাউনলোড কোয়ালিটি:</label>
+                <select id="downloadQuality" style="background:#0f3460;color:white;border:1px solid #333;border-radius:5px;padding:6px 10px;font-size:13px;"></select>
+                <button onclick="downloadVideo()" style="margin-left:8px;padding:8px 16px;border:none;border-radius:5px;background:#4CAF50;color:white;cursor:pointer;font-size:13px;">⬇️ ডাউনলোড করুন</button>
+            </div>
+            <a href="/list.html" class="back-btn">← লিস্টে ফিরে যান</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const videoId = params.get('id');
+            
+            const video = document.getElementById('videoPlayer');
+            const loading = document.getElementById('loading');
+            const statusBadge = document.getElementById('statusBadge');
+            const videoTitle = document.getElementById('videoTitle');
+            const bufferLoader = document.getElementById('bufferLoader');
+            const bufferProgress = document.getElementById('bufferProgress');
+            const qualityBadge = document.getElementById('qualityBadge');
+            const qualitySelectWrap = document.getElementById('qualitySelectWrap');
+            const qualitySelect = document.getElementById('qualitySelect');
+
+            if (!videoId) {
+                loading.innerHTML = '❌ ভিডিও আইডি নেই!';
+                loading.className = 'loading error';
+                statusBadge.textContent = '❌ এরর';
+                statusBadge.className = 'badge error';
+                return;
+            }
+
+            videoTitle.textContent = '🎬 ভিডিও #' + videoId;
+            let playlistUrl = null;
+
+            let hls = null;
+            let seekRetry = 0;
+            const MAX_SEEK_RETRY = 3;
+
+            function labelForLevel(level) {
+                if (level.name) return level.name;
+                if (level.height) return level.height + 'p';
+                return Math.round((level.bitrate || 0) / 1000) + 'kbps';
+            }
+
+            function updateQualityBadge(levelIndex) {
+                if (!hls || !hls.levels || !hls.levels[levelIndex]) return;
+                qualityBadge.style.display = 'inline-block';
+                qualityBadge.textContent = '🎚️ ' + labelForLevel(hls.levels[levelIndex]);
+            }
+
+            window.onQualitySelectChange = function() {
+                if (!hls) return;
+                const val = parseInt(qualitySelect.value, 10);
+                hls.currentLevel = val; // -1 = auto (ABR)
+            };
+
+            // আগে stream ও download একই সার্ভারে ছিল বলে relative path (`/download/...`) কাজ করত।
+            // এখন download আলাদা প্রজেক্ট/হোস্টে, তাই নিচের base URL-টা সেই হোস্টের ঠিকানায় সেট করুন
+            // (খালি রাখলে আগের মতোই একই origin ধরে নেবে — নিজের ডোমেইনে দুটো এক জায়গায় রাখলে দরকার নেই)।
+            const DOWNLOAD_SERVER_BASE = ''; // উদাহরণ: 'https://download.yourdomain.com'
+
+            window.downloadVideo = function() {
+                const q = document.getElementById('downloadQuality').value;
+                if (!q) return;
+                const url = `${DOWNLOAD_SERVER_BASE}/download/${encodeURIComponent(videoId)}/${encodeURIComponent(q)}`;
+                // window.location.href দিয়ে navigate করলে current tab-ই সেই request নেয় —
+                // download fail হলে (এরর JSON বা headers আসার আগে) পুরো play page replace/stuck হয়ে যেত।
+                // এখন hidden <a target="_blank"> দিয়ে trigger করা হচ্ছে, তাই playing video-তে কোনো প্রভাব পড়ে না।
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '';
+                a.target = '_blank';
+                a.rel = 'noopener';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+            function showBuffer() {
+                bufferLoader.classList.add('show');
+                statusBadge.textContent = '⏳ বাফারিং...';
+                statusBadge.className = 'badge buffering';
+            }
+
+            function hideBuffer() {
+                bufferLoader.classList.remove('show');
+                if (statusBadge.textContent === '⏳ বাফারিং...') {
+                    statusBadge.textContent = '✅ স্ট্রিমিং';
+                    statusBadge.className = 'badge success';
+                }
+            }
+
+            function updateProgress(p) {
+                bufferProgress.style.width = Math.min(100, p) + '%';
+            }
+
+            function playVideo() {
+                if (Hls.isSupported()) {
+                    // ====== HLS CONFIG ======
+                    hls = new Hls({
+                        enableWorker: true,
+                        lowLatencyMode: false,
+                        manifestLoadingTimeOut: 30000,
+                        manifestLoadingMaxRetry: 4,
+                        manifestLoadingRetryDelay: 1000,
+                        fragLoadingTimeOut: 30000,
+                        fragLoadingMaxRetry: 4,
+                        fragLoadingRetryDelay: 1000,
+                        maxBufferLength: 20,
+                        maxMaxBufferLength: 60,
+                        backbufferLength: 10,
+                        startPosition: 0,
+                        maxAudioFramesDrift: 5, // ← seek-এর পর A/V drift বেশি হলেও resync করবে
+                        debug: false
+                    });
+
+                    hls.loadSource(playlistUrl);
+                    hls.attachMedia(video);
+
+                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                        loading.style.display = 'none';
+                        video.style.display = 'block';
+                        statusBadge.textContent = '✅ স্ট্রিমিং';
+                        statusBadge.className = 'badge success';
+                        video.controls = true;
+                        hideBuffer();
+
+                        if (hls.levels && hls.levels[0] && hls.levels[0].details) {
+                            const dur = hls.levels[0].details.totalduration;
+                            if (dur > 0) console.log('📊 Playlist duration:', dur, 's');
+                        }
+
+                        // ====== কোয়ালিটি সিলেক্টর (একাধিক rendition থাকলেই দেখানো হয়) ======
+                        if (hls.levels && hls.levels.length > 1) {
+                            const sorted = hls.levels
+                                .map((lvl, idx) => ({ idx, height: lvl.height || 0 }))
+                                .sort((a, b) => b.height - a.height);
+
+                            let options = '<option value="-1">🔄 অটো (ABR)</option>';
+                            sorted.forEach(({ idx }) => {
+                                options += `<option value="${idx}">${labelForLevel(hls.levels[idx])}</option>`;
+                            });
+                            qualitySelect.innerHTML = options;
+                            qualitySelect.value = '-1';
+                            qualitySelectWrap.style.display = 'block';
+                        }
+
+                        updateQualityBadge(hls.currentLevel >= 0 ? hls.currentLevel : hls.firstLevel);
+                    });
+
+                    hls.on(Hls.Events.LEVEL_SWITCHED, function(event, data) {
+                        console.log('🎚️ Level switched:', labelForLevel(hls.levels[data.level] || {}));
+                        updateQualityBadge(data.level);
+                    });
+
+                    // ====== ERROR HANDLING ======
+                    hls.on(Hls.Events.ERROR, function(event, data) {
+                        if (['bufferSeekOverHole', 'fragParsingError', 'fragLoadError', 'fragDecryptError', 'keyLoadingError'].includes(data.details)) {
+                            console.warn('⚠️ Skipping:', data.details);
+                            // hls.loadFragment() নামে কোনো পাবলিক API নেই (এটাই TypeError-এর কারণ ছিল)।
+                            // সঠিক পন্থা: বর্তমান পজিশন থেকে লোড আবার শুরু করা, যেটা আটকে থাকা/নষ্ট ফ্র্যাগমেন্ট এড়িয়ে যায়
+                            setTimeout(() => {
+                                if (hls) hls.startLoad(video.currentTime);
+                            }, 1000);
+                            return;
+                        }
+                        if (!data.fatal) return;
+                        
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                hls.startLoad();
+                                showBuffer();
+                                return;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                hls.recoverMediaError();
+                                showBuffer();
+                                return;
+                            default:
+                                loading.innerHTML = '❌ এরর!<br><small>' + data.details + '</small>';
+                                loading.className = 'loading error';
+                                video.style.display = 'none';
+                                statusBadge.textContent = '❌ এরর';
+                                statusBadge.className = 'badge error';
+                                hideBuffer();
+                                hls.destroy();
+                        }
+                    });
+
+                    // ====== VIDEO EVENTS ======
+                    video.addEventListener('loadedmetadata', function() {
+                        if (this.duration > 0) console.log('📊 Duration:', this.duration, 's');
+                    });
+
+                    video.addEventListener('waiting', showBuffer);
+                    video.addEventListener('canplay', hideBuffer);
+                    video.addEventListener('playing', hideBuffer);
+                    
+                    // ====== INSTANT SEEK ======
+                    video.addEventListener('seeking', function() {
+                        console.log('⏩ Seeking to:', video.currentTime);
+                        showBuffer();
+                        seekRetry = 0;
+                    });
+
+                    video.addEventListener('seeked', function() {
+                        console.log('✅ Seek completed:', video.currentTime);
+                        setTimeout(hideBuffer, 300);
+                        if (this.paused && this.currentTime > 0) {
+                            this.play().catch(() => {});
+                        }
+                    });
+
+                    video.addEventListener('progress', function() {
+                        if (this.buffered.length > 0) {
+                            const end = this.buffered.end(this.buffered.length - 1);
+                            if (this.duration > 0) {
+                                updateProgress((end / this.duration) * 100);
+                            }
+                        }
+                    });
+
+                    video.addEventListener('ended', function() {
+                        if (this.currentTime > 0 && this.duration > 0 && this.currentTime < this.duration - 1) {
+                            seekRetry++;
+                            if (seekRetry <= MAX_SEEK_RETRY) {
+                                showBuffer();
+                                setTimeout(() => {
+                                    this.currentTime = Math.max(0, this.currentTime - 0.5);
+                                    this.play().catch(() => {});
+                                    setTimeout(hideBuffer, 500);
+                                }, 200);
+                            } else {
+                                location.reload();
+                            }
+                        }
+                    });
+
+                    video.addEventListener('stalled', function() {
+                        showBuffer();
+                        hls.startLoad();
+                    });
+
+                    video.addEventListener('error', function() {
+                        hideBuffer();
+                    });
+
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = playlistUrl;
+                    video.addEventListener('loadedmetadata', function() {
+                        loading.style.display = 'none';
+                        video.style.display = 'block';
+                        statusBadge.textContent = '✅ স্ট্রিমিং';
+                        statusBadge.className = 'badge success';
+                        video.controls = true;
+                        hideBuffer();
+                    });
+                } else {
+                    loading.innerHTML = '❌ HLS সাপোর্ট নেই!';
+                    loading.className = 'loading error';
+                    statusBadge.textContent = '❌ সাপোর্ট নেই';
+                    statusBadge.className = 'badge error';
+                }
+            }
+
+            window.addEventListener('beforeunload', function() {
+                if (hls) hls.destroy();
+            });
+
+            async function init() {
+                try {
+                    const res = await fetch('/api/video/' + encodeURIComponent(videoId));
+                    const data = await res.json();
+                    if (!data.success) throw new Error(data.error || 'ভিডিও পাওয়া যায়নি');
+
+                    playlistUrl = data.playlistUrl;
+                    if (data.name) videoTitle.textContent = '🎬 ' + data.name;
+
+                    if (Array.isArray(data.variants) && data.variants.length > 0) {
+                        const downloadQuality = document.getElementById('downloadQuality');
+                        downloadQuality.innerHTML = data.variants
+                            .map(v => `<option value="${v.name}">${v.name}${v.height ? ' (' + v.width + 'x' + v.height + ')' : ''}</option>`)
+                            .join('');
+                        document.getElementById('downloadWrap').style.display = 'block';
+                    }
+
+                    playVideo();
+                } catch (err) {
+                    loading.innerHTML = '❌ ভিডিও লোড করা যায়নি!<br><small>' + err.message + '</small>';
+                    loading.className = 'loading error';
+                    statusBadge.textContent = '❌ এরর';
+                    statusBadge.className = 'badge error';
+                }
+            }
+
+            init();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{
+    "channelId": "-1004292043728",
+    "chnlCreatedByTGUsername": "xxrb",
+    "settings": {
+        "maxRetries": 5,
+        "retryDelay": 5000,
+        "concurrentUploads": 5
+    },
+    "stream_bots": [
+        {
+            "id": 1,
+            "token": "8695073444:AAGbcDGAa223F_0k0hwWRlSTn92Ex0FXjjo",
+            "name": "TESTHLS",
+            "username": "testhlssx_bot",
+            "createdByUsername": "xxrb",
+            "isEnabled": true
+        }
+    ],
+    "download_bots": [
+        {
+            "id": 1,
+            "token": "8814864257:AAG_W2tdP1z2ewPdtc4gFNO-4l1EKTQcJB4",
+            "name": "Auraflix",
+            "username": "auraflixxbot",
+            "createdByUsername": "xxrb",
+            "isEnabled": true
+        }
+    ],
+    "upload_bots": [
+        {
+            "id": 1,
+            "token": "8814864257:AAG_W2tdP1z2ewPdtc4gFNO-4l1EKTQcJBq",
+            "name": "upBot",
+            "username": "upbot",
+            "createdByUsername": "xxrb",
+            "isEnabled": true
+        }
+    ]
+}

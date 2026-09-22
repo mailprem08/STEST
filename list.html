@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VIDEO LISTS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+        
+        /* ===== Navigation ===== */
+        .navbar {
+            background: #16213e;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border: 1px solid #1a1a2e;
+        }
+        .navbar .logo {
+            font-size: 20px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #e94560, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .navbar .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .navbar .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .navbar .nav-links a:hover {
+            background: #1a1a2e;
+            color: white;
+        }
+        .navbar .nav-links a.active {
+            background: #e94560;
+            color: white;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #1a1a2e;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 28px;
+            background: linear-gradient(45deg, #e94560, #4CAF50);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #e94560;
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: scale(1.05);
+            background: #c73652;
+        }
+        .btn-secondary {
+            background: #1a1a2e;
+            color: white;
+            border: 1px solid #333;
+        }
+        .btn-secondary:hover {
+            background: #2a2a3e;
+        }
+        .stats {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .video-card {
+            background: #16213e;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            cursor: pointer;
+            position: relative;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: #e94560;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.2);
+        }
+        .video-card .thumbnail {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .video-card .thumbnail .play-icon {
+            position: absolute;
+            background: rgba(233, 69, 96, 0.9);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+        .video-card:hover .play-icon {
+            transform: scale(1.2);
+            background: rgba(233, 69, 96, 1);
+        }
+        .video-card .video-id {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .video-card .video-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .video-card .video-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #666;
+            padding-top: 10px;
+            border-top: 1px solid #1a1a2e;
+        }
+        .video-card .video-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #666;
+        }
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .empty-state h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .empty-state p {
+            font-size: 16px;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #1a1a2e;
+            border-top: 4px solid #e94560;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .navbar .nav-links {
+                justify-content: center;
+            }
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="logo">🎬 VideoStream</div>
+            <div class="nav-links">
+                <a href="/">🏠 হোম</a>
+                <a href="/list.html" class="active">📋 লাইব্রেরি</a>
+                <a href="/upload.html">📤 আপলোড</a>
+            </div>
+        </nav>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>📋 ভিডিও লাইব্রেরি</h1>
+            <div class="header-actions">
+                <a href="/upload.html" class="btn btn-primary">+ আপলোড করুন</a>
+                <button onclick="refreshList()" class="btn btn-secondary">🔄 রিফ্রেশ</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats" id="stats">লোড হচ্ছে...</div>
+
+        <!-- Video Grid -->
+        <div id="videoGrid" class="video-grid">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p style="margin-top: 20px;">ভিডিও লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadVideos() {
+            const grid = document.getElementById('videoGrid');
+            const stats = document.getElementById('stats');
+
+            try {
+                const response = await fetch('/api/videos');
+                const data = await response.json();
+
+                if (!data.success) {
+                    throw new Error(data.error);
+                }
+
+                if (data.count === 0) {
+                    stats.textContent = '📭 কোনো ভিডিও পাওয়া যায়নি';
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1 / -1;">
+                            <div class="icon">🎥</div>
+                            <h2>কোনো ভিডিও নেই</h2>
+                            <p>আপলোড বাটনে ক্লিক করে প্রথম ভিডিও আপলোড করুন</p>
+                            <br>
+                            <a href="/upload.html" class="btn btn-primary">📤 ভিডিও আপলোড করুন</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                stats.textContent = `📊 মোট ${data.count} টি ভিডিও`;
+
+                grid.innerHTML = data.videos.map(video => `
+                    <div class="video-card" onclick="window.location.href='${video.url}'">
+                        <div class="thumbnail">
+                            <div class="play-icon">▶️</div>
+                            <span style="font-size: 12px; color: #666; position: absolute; bottom: 10px; right: 10px;">
+                                #${video.id}
+                            </span>
+                        </div>
+                        <div class="video-id">🎬 ভিডিও আইডি: ${video.id}</div>
+                        <div class="video-name">${video.name}</div>
+                        <div class="video-meta">
+                            <span>📅 ${new Date(video.created).toLocaleDateString('bn-BD')}</span>
+                            <span>⏰ ${new Date(video.created).toLocaleTimeString('bn-BD')}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (err) {
+                stats.textContent = '❌ এরর: ' + err.message;
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="icon">❌</div>
+                        <h2>ভিডিও লোড করা যায়নি</h2>
+                        <p>${err.message}</p>
+                        <br>
+                        <button onclick="loadVideos()" class="btn btn-primary">🔄 আবার চেষ্টা করুন</button>
+                    </div>
+                `;
+            }
+        }
+
+        function refreshList() {
+            document.getElementById('videoGrid').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 20px;">রিফ্রেশ হচ্ছে...</p>
+                </div>
+            `;
+            loadVideos();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadVideos);
+    </script>
+</body>
+</html>
