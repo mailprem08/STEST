@@ -15,35 +15,19 @@
             "createdByUsername": "xxrb",
             "isEnabled": true
         },
-        {
-            "id": 2,
-            "token": "8620106358:AAEH9Zy9gi4BYvElmOKnveMe5LkFLKj2zU4",
-            "name": "CRworker 3",
-            "username": "CRworker3_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
-		
-		
-		
-		
-		
-			        {
+
+		{
             "id": 1,
             "token": "8814864257:AAG_W2tdP1z2ewPdtc4gFNO-4l1EKTQcJB4",
             "name": "Auraflix",
             "username": "auraflixxbot",
             "createdByUsername": "xxrb",
             "isEnabled": true
-        },
-        {
-            "id": 1,
-            "token": "8706449189:AAEtmKBXxZZiQFP9FMW05-gyUlLnvef_WAw",
-            "name": "CRworker 4",
-            "username": "CRworker4_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
+        }
+    ],
+    "download_bots": [
+		
+
 		      {
             "id": 1,
             "token": "8706449189:AAEtmKBXxZZiQFP9FMW05-gyUlLnvef_WAw",
@@ -60,50 +44,11 @@
             "createdByUsername": "xxrb",
             "isEnabled": true
         }
-		
-		
-
-
     ],
-    "download_bots": [
-        {
-            "id": 1,
-            "token": "8814864257:AAG_W2tdP1z2ewPdtc4gFNO-4l1EKTQcJB4",
-            "name": "Auraflix",
-            "username": "auraflixxbot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
-        {
-            "id": 1,
-            "token": "8706449189:AAEtmKBXxZZiQFP9FMW05-gyUlLnvef_WAw",
-            "name": "CRworker 4",
-            "username": "CRworker4_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        }
-    ],
+
+	
     "upload_bots": [
-        {
-            "id": 1,
-            "token": "8706449189:AAEtmKBXxZZiQFP9FMW05-gyUlLnvef_WAw",
-            "name": "CRworker 1",
-            "username": "CRworker1_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
-            {
-            "id": 2,
-            "token": "8892835082:AAF77PIcdj-RKknMwDDFnjdcqF4s0vFS0uc",
-            "name": "CRworker 2",
-            "username": "CRworker2_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
-
-
-
-        {
+          {
             "id": 2,
             "token": "8620106358:AAEH9Zy9gi4BYvElmOKnveMe5LkFLKj2zU4",
             "name": "CRworker 3",
@@ -116,25 +61,6 @@
             "token": "8706449189:AAEtmKBXxZZiQFP9FMW05-gyUlLnvef_WAw",
             "name": "CRworker 4",
             "username": "CRworker4_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
-
-
-
-        {
-            "id": 1,
-            "token": "8695073444:AAGbcDGAa223F_0k0hwWRlSTn92Ex0FXjjo",
-            "name": "TESTHLS",
-            "username": "testhlssx_bot",
-            "createdByUsername": "xxrb",
-            "isEnabled": true
-        },
-                {
-            "id": 1,
-            "token": "8814864257:AAG_W2tdP1z2ewPdtc4gFNO-4l1EKTQcJB4",
-            "name": "Auraflix",
-            "username": "auraflixxbot",
             "createdByUsername": "xxrb",
             "isEnabled": true
         }
