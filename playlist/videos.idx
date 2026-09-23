@@ -575,5 +575,38 @@
       }
     ],
     "hasAudio": true
+  },
+  "1790122530667": {
+    "id": "1790122530667",
+    "name": "Jadoo Ki Jhappi - Mika Singh - Neha Kakkar - Ramaiya Vastavaiya - 2013.mkv",
+    "created": 1790123754060,
+    "masterFileName": "MP_1790122530667.m3u8",
+    "playlistUrl": "/s/BQACAgUAAyEGAAT_02PQAAIWQmqzHulpqZzKVoO_RRXyoYVcTXEJAALWJAACiyqZVWTM7rVzwWlRPQQ",
+    "renditions": [
+      "720p",
+      "1080p",
+      "1440p"
+    ],
+    "variants": [
+      {
+        "name": "1440p",
+        "height": 1440,
+        "width": 2560,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIWQWqzHumBkYgiNbRiv5GPeKSFdEr4AALVJAACiyqZVSgvgNspAdt2PQQ"
+      },
+      {
+        "name": "1080p",
+        "height": 1080,
+        "width": 1920,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIWQGqzHujzkgcoU61Qcq4prYvKGBABAALUJAACiyqZVV5sTy_W46XiPQQ"
+      },
+      {
+        "name": "720p",
+        "height": 720,
+        "width": 1280,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIWP2qzHueCqLedS7Uo8Q7VeS-KWMBPAALTJAACiyqZVeUH3YCR96c9PQQ"
+      }
+    ],
+    "hasAudio": true
   }
 }
