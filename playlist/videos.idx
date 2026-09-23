@@ -608,5 +608,38 @@
       }
     ],
     "hasAudio": true
+  },
+  "1790124181773": {
+    "id": "1790124181773",
+    "name": "Deewane Hum Nahi Hote Deewani Raat Aati Hai - Stebin Ben ( Selfie) Akshay Kumar -Jacqueline,Emraan H.mkv",
+    "created": 1790125604580,
+    "masterFileName": "MP_1790124181773.m3u8",
+    "playlistUrl": "/s/BQACAgUAAyEGAAT_02PQAAIWnWqzJiT09DoQDqCXU4Ya7lZgXomkAAI3JQACiyqZVaODMviKaJF3PQQ",
+    "renditions": [
+      "720p",
+      "1080p",
+      "1440p"
+    ],
+    "variants": [
+      {
+        "name": "1440p",
+        "height": 1440,
+        "width": 2560,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIWnGqzJiM_7Nx54fnxBpRlA4kB-ktTAAI2JQACiyqZVUh-ab_5lvN8PQQ"
+      },
+      {
+        "name": "1080p",
+        "height": 1080,
+        "width": 1920,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIWm2qzJiOAeIz9mYR1QL1LxEAMIIqKAAI1JQACiyqZVciCOSLohZeqPQQ"
+      },
+      {
+        "name": "720p",
+        "height": 720,
+        "width": 1280,
+        "url": "/s/BQACAgUAAyEGAAT_02PQAAIWmmqzJiKlYni1tF-XlZuT-rU6NhjEAAI0JQACiyqZVSusysW2OoGCPQQ"
+      }
+    ],
+    "hasAudio": true
   }
 }
